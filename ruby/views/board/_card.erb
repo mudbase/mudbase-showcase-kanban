@@ -1,0 +1,39 @@
+<div class="kanban-card">
+  <p class="kanban-card-title"><%= h(card[:title]) %></p>
+  <% if card[:description] && !card[:description].to_s.empty? %>
+    <p class="kanban-card-desc"><%= h(card[:description]) %></p>
+  <% end %>
+
+  <% if card[:assigneeName] && !card[:assigneeName].to_s.empty? %>
+    <div class="kanban-card-meta">
+      <span class="assignee-chip"><%= initials(card[:assigneeName]) %> <%= h(card[:assigneeName]) %></span>
+    </div>
+  <% end %>
+
+  <% if can_manage_cards? %>
+    <div class="kanban-card-actions">
+      <form action="/cards/<%= h(card[:_id]) %>/move_up" method="post">
+        <button type="submit" class="btn btn-sm btn-outline btn-icon" aria-label="Move card up" <%= "disabled" if is_first_card %>>&uarr;</button>
+      </form>
+      <form action="/cards/<%= h(card[:_id]) %>/move_down" method="post">
+        <button type="submit" class="btn btn-sm btn-outline btn-icon" aria-label="Move card down" <%= "disabled" if is_last_card %>>&darr;</button>
+      </form>
+      <a href="/cards/<%= h(card[:_id]) %>/edit" class="btn btn-sm btn-outline">Edit</a>
+      <form action="/cards/<%= h(card[:_id]) %>/delete" method="post">
+        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+      </form>
+
+      <% if other_lists.any? %>
+        <form action="/cards/<%= h(card[:_id]) %>/move" method="post" style="display:flex; gap:0.25rem; width:100%; margin-top:0.25rem;">
+          <select name="list_id" aria-label="Move to list">
+            <option value="">Move to&hellip;</option>
+            <% other_lists.each do |target| %>
+              <option value="<%= h(target[:_id]) %>"><%= h(target[:name]) %></option>
+            <% end %>
+          </select>
+          <button type="submit" class="btn btn-sm btn-outline">Move</button>
+        </form>
+      <% end %>
+    </div>
+  <% end %>
+</div>

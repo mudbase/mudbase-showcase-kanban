@@ -1,0 +1,48 @@
+<div class="list-column">
+  <div class="list-header">
+    <% if can_manage_lists? %>
+      <form action="/lists/<%= h(list[:_id]) %>/rename" method="post" style="display:flex; gap:0.3rem; flex:1;">
+        <input type="text" name="name" value="<%= h(list[:name]) %>" maxlength="60" required style="min-width:0; flex:1; font-weight:600; font-size:0.85rem; padding:0.3rem 0.4rem;">
+        <button type="submit" class="btn btn-sm btn-outline" title="Save name">Save</button>
+      </form>
+    <% else %>
+      <h2 class="list-title"><%= h(list[:name]) %> <span class="list-count">(<%= cards.length %>)</span></h2>
+    <% end %>
+
+    <% if can_manage_lists? %>
+      <div class="list-actions">
+        <form action="/lists/<%= h(list[:_id]) %>/move" method="post">
+          <input type="hidden" name="direction" value="left">
+          <button type="submit" class="btn btn-sm btn-outline btn-icon" aria-label="Move list left" <%= "disabled" if is_first %>>&larr;</button>
+        </form>
+        <form action="/lists/<%= h(list[:_id]) %>/move" method="post">
+          <input type="hidden" name="direction" value="right">
+          <button type="submit" class="btn btn-sm btn-outline btn-icon" aria-label="Move list right" <%= "disabled" if is_last %>>&rarr;</button>
+        </form>
+        <form action="/lists/<%= h(list[:_id]) %>/delete" method="post">
+          <button type="submit" class="btn btn-sm btn-danger btn-icon" aria-label="Delete list <%= h(list[:name]) %>">&times;</button>
+        </form>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="list-body">
+    <% cards.each_with_index do |card, card_index| %>
+      <%= erb :"board/_card", layout: false, locals: {
+        card: card,
+        other_lists: other_lists,
+        is_first_card: card_index.zero?,
+        is_last_card: card_index == cards.length - 1,
+      } %>
+    <% end %>
+    <% if cards.empty? %>
+      <p class="empty-column">No cards yet</p>
+    <% end %>
+  </div>
+
+  <% if can_manage_cards? %>
+    <div style="padding:0 0.75rem 0.75rem;">
+      <a href="/lists/<%= h(list[:_id]) %>/cards/new" class="btn btn-sm btn-outline btn-block">+ Add card</a>
+    </div>
+  <% end %>
+</div>

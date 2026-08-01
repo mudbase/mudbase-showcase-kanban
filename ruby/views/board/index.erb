@@ -1,0 +1,40 @@
+<div class="board-header">
+  <div>
+    <h1 class="page-title">Team Board</h1>
+    <p class="page-subtitle">One shared board for the whole team.</p>
+    <% if viewer? %>
+      <p class="readonly-notice">Read-only - you're signed in as Viewer.</p>
+    <% elsif member? %>
+      <p class="readonly-notice">Signed in as Member - you can create, edit, and move cards. List management is owner-only.</p>
+    <% end %>
+  </div>
+</div>
+
+<div class="board-scroll">
+  <% @lists.each_with_index do |list, list_index| %>
+    <% cards = @cards_by_list[list[:_id]] || [] %>
+    <% other_lists = @lists.reject { |l| l[:_id] == list[:_id] } %>
+    <%= erb :"board/_list_column", layout: false, locals: {
+      list: list,
+      cards: cards,
+      other_lists: other_lists,
+      is_first: list_index.zero?,
+      is_last: list_index == @lists.length - 1,
+    } %>
+  <% end %>
+
+  <% if @lists.empty? %>
+    <div class="empty-state" style="flex:1;">
+      <p>No lists yet.<% if can_manage_lists? %> Add the first one below.<% end %></p>
+    </div>
+  <% end %>
+
+  <% if can_manage_lists? %>
+    <div class="add-list-column">
+      <form action="/lists" method="post" class="add-list-form">
+        <input type="text" name="name" placeholder="New list name" maxlength="60" required>
+        <button type="submit" class="btn btn-sm">Add list</button>
+      </form>
+    </div>
+  <% end %>
+</div>
