@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Activity{% endblock %}
+{% block content %}
+  <div class="section-head">
+    <h1>Activity</h1>
+  </div>
+  <p class="muted text-sm" style="margin-top: -0.5rem; margin-bottom: 1.25rem;">
+    Every list and card change on the board, newest first.
+  </p>
+
+  {% if load_error %}
+    <p class="error-state">{{ load_error }}</p>
+  {% elif not entries %}
+    <div class="empty-state">No activity yet.</div>
+  {% else %}
+    <div class="activity-list">
+      {% for entry in entries %}
+        {% include "partials/activity_item.html" with context %}
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}

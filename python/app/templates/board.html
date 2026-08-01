@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Board{% endblock %}
+{% block content %}
+  <div class="section-head" style="flex-direction: column; align-items: flex-start; gap: 0.35rem;">
+    <h1>Team Board</h1>
+    {% if is_read_only %}
+      <p class="muted text-sm">Read-only — you're signed in as {{ role_label }}. Lists and cards update when an owner or member makes a change.</p>
+    {% else %}
+      <p class="muted text-sm">
+        Signed in as {{ role_label }}. Every list, card, and move on this page is a real Mudbase
+        collection write, through the real Mudbase Python SDK — no hand-rolled backend.
+      </p>
+    {% endif %}
+  </div>
+
+  {% if load_error %}
+    <p class="error-state">{{ load_error }}</p>
+  {% else %}
+    <div class="kanban-board">
+      {% for list in lists %}
+        {% set is_first_list = loop.first %}
+        {% set is_last_list = loop.last %}
+        {% include "partials/list_column.html" with context %}
+      {% endfor %}
+
+      {% if can_manage_lists %}
+        <div class="kanban-column kanban-column-add">
+          <form method="post" action="/lists" class="add-list-form">
+            <label for="name">New list</label>
+            <input type="text" id="name" name="name" maxlength="60" placeholder="List name" required />
+            <button type="submit" class="btn btn-primary btn-sm btn-block">+ Add list</button>
+          </form>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if not lists %}
+      <div class="empty-state">
+        No lists on this board yet.{% if can_manage_lists %} Add one above to get started.{% endif %}
+      </div>
+    {% endif %}
+  {% endif %}
+{% endblock %}

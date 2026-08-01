@@ -1,0 +1,49 @@
+{% set list_cards = cards_by_list.get(list.id, []) %}
+<div class="kanban-column">
+  <div class="kanban-column-header">
+    <h2>{{ list.name }}</h2>
+    <span class="kanban-count">{{ list_cards | length }}</span>
+  </div>
+
+  {% if can_manage_lists %}
+  <div class="kanban-column-actions">
+    <form method="post" action="/lists/{{ list.id }}/reorder" class="inline-form">
+      <input type="hidden" name="direction" value="left" />
+      <button type="submit" class="btn btn-outline btn-xs" {% if is_first_list %}disabled{% endif %} aria-label="Move {{ list.name }} column left">&larr;</button>
+    </form>
+    <form method="post" action="/lists/{{ list.id }}/reorder" class="inline-form">
+      <input type="hidden" name="direction" value="right" />
+      <button type="submit" class="btn btn-outline btn-xs" {% if is_last_list %}disabled{% endif %} aria-label="Move {{ list.name }} column right">&rarr;</button>
+    </form>
+    <details class="inline-edit">
+      <summary class="btn btn-outline btn-xs">Rename</summary>
+      <form method="post" action="/lists/{{ list.id }}/rename" class="inline-edit-form">
+        <input type="text" name="name" value="{{ list.name }}" maxlength="60" required aria-label="List name" />
+        <button type="submit" class="btn btn-primary btn-xs">Save</button>
+      </form>
+    </details>
+    <form method="post" action="/lists/{{ list.id }}/delete" class="inline-form">
+      <button type="submit" class="btn btn-danger-outline btn-xs">Delete</button>
+    </form>
+  </div>
+  {% endif %}
+
+  <div class="kanban-card-list">
+    {% if not list_cards %}
+      <p class="empty-state-sm">No cards yet.</p>
+    {% endif %}
+    {% for card in list_cards %}
+      {% set is_first_card = loop.first %}
+      {% set is_last_card = loop.last %}
+      {% include "partials/card_item.html" with context %}
+    {% endfor %}
+  </div>
+
+  {% if can_manage_cards %}
+  <form method="post" action="/cards" class="add-card-form">
+    <input type="hidden" name="list_id" value="{{ list.id }}" />
+    <input type="text" name="title" maxlength="120" placeholder="New card title" required aria-label="New card title" />
+    <button type="submit" class="btn btn-outline btn-sm btn-block">+ Add card</button>
+  </form>
+  {% endif %}
+</div>

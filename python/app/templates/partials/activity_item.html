@@ -1,0 +1,28 @@
+<div class="activity-item">
+  <span class="avatar avatar-sm">{{ entry.actor_name | initial }}</span>
+  <div class="activity-body">
+    <p class="activity-text">
+      <strong>{{ entry.actor_name }}</strong>
+      {% if entry.action == "created_card" %}
+        created card <em>{{ entry.card_title }}</em> in {{ entry.to_list }}
+      {% elif entry.action == "moved" %}
+        {% if entry.from_list == entry.to_list %}
+          reordered <em>{{ entry.card_title }}</em> in {{ entry.to_list }}
+        {% else %}
+          moved <em>{{ entry.card_title }}</em> from {{ entry.from_list }} to {{ entry.to_list }}
+        {% endif %}
+      {% elif entry.action == "deleted_card" %}
+        deleted card <em>{{ entry.card_title }}</em> from {{ entry.from_list }}
+      {% elif entry.action == "created_list" %}
+        created list <em>{{ entry.to_list }}</em>
+      {% elif entry.action == "renamed_list" %}
+        renamed list <em>{{ entry.from_list }}</em> to <em>{{ entry.to_list }}</em>
+      {% elif entry.action == "deleted_list" %}
+        deleted list <em>{{ entry.from_list }}</em>
+      {% else %}
+        {{ entry.action }}
+      {% endif %}
+    </p>
+    <span class="activity-time">{{ entry.created_at | relative_time }}</span>
+  </div>
+</div>
