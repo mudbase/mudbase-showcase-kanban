@@ -1,0 +1,63 @@
+@page
+@model MudbaseShowcase.Kanban.Pages.IndexModel
+@{
+    ViewData["Title"] = "Board";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h1 class="h4 fw-semibold mb-0">Team Board</h1>
+    @if (Model.IsReadOnlyFlag)
+    {
+        <span class="badge text-bg-light border">Read-only — you're signed in as @Model.RoleLabelText</span>
+    }
+</div>
+
+@if (Model.FlashError is not null)
+{
+    <p class="text-danger small" role="alert">@Model.FlashError</p>
+}
+
+@if (Model.LoadError is not null)
+{
+    <p class="text-danger">@Model.LoadError</p>
+}
+else
+{
+    <div class="d-flex gap-3 overflow-auto pb-3 kanban-row">
+        @for (int i = 0; i < Model.Lists.Count; i++)
+        {
+            BoardListViewModel column = Model.Lists[i];
+            var columnModel = new ListColumnViewModel
+            {
+                Column = column,
+                PrevListId = i > 0 ? Model.Lists[i - 1].List.Id : null,
+                NextListId = i < Model.Lists.Count - 1 ? Model.Lists[i + 1].List.Id : null,
+                AllLists = Model.Lists,
+                NextPositionByListId = Model.NextPositionByListId,
+                CanManageLists = Model.CanManageListsFlag,
+                CanManageCards = Model.CanManageCardsFlag,
+            };
+            <partial name="_ListColumn" model="columnModel" />
+        }
+
+        @if (Model.CanManageListsFlag)
+        {
+            <div class="flex-shrink-0 kanban-column">
+                <details>
+                    <summary class="btn btn-outline-secondary w-100">+ Add list</summary>
+                    <form method="post" asp-page-handler="CreateList" class="border rounded p-3 mt-2 bg-white">
+                        <div class="mb-2">
+                            <input type="text" name="name" maxlength="60" required class="form-control form-control-sm" placeholder="List name" />
+                        </div>
+                        <button type="submit" class="btn btn-brand btn-sm">Add list</button>
+                    </form>
+                </details>
+            </div>
+        }
+
+        @if (Model.Lists.Count == 0 && !Model.CanManageListsFlag)
+        {
+            <p class="text-muted small">The board has no lists yet.</p>
+        }
+    </div>
+}

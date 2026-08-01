@@ -1,0 +1,86 @@
+@model MudbaseShowcase.Kanban.Models.ListColumnViewModel
+
+<div class="flex-shrink-0 kanban-column border rounded bg-body-tertiary d-flex flex-column">
+    <div class="d-flex align-items-center justify-content-between gap-2 border-bottom p-2">
+        <h2 class="h6 mb-0 text-truncate">
+            @Model.Column.List.Name <span class="text-muted fw-normal">(@Model.Column.Cards.Count)</span>
+        </h2>
+        @if (Model.CanManageLists)
+        {
+            <div class="d-flex gap-1 flex-shrink-0">
+                @if (Model.PrevListId is not null)
+                {
+                    <form method="post" asp-page-handler="ReorderList" class="d-inline">
+                        <input type="hidden" name="listId" value="@Model.Column.List.Id" />
+                        <input type="hidden" name="neighborListId" value="@Model.PrevListId" />
+                        <button type="submit" class="btn btn-sm btn-outline-secondary" aria-label="Move list left" title="Move left">&larr;</button>
+                    </form>
+                }
+                @if (Model.NextListId is not null)
+                {
+                    <form method="post" asp-page-handler="ReorderList" class="d-inline">
+                        <input type="hidden" name="listId" value="@Model.Column.List.Id" />
+                        <input type="hidden" name="neighborListId" value="@Model.NextListId" />
+                        <button type="submit" class="btn btn-sm btn-outline-secondary" aria-label="Move list right" title="Move right">&rarr;</button>
+                    </form>
+                }
+                <details>
+                    <summary class="btn btn-sm btn-outline-secondary" aria-label="Rename list" title="Rename list">&#9998;</summary>
+                    <form method="post" asp-page-handler="RenameList" class="d-flex gap-1 mt-1">
+                        <input type="hidden" name="listId" value="@Model.Column.List.Id" />
+                        <input type="text" name="newName" value="@Model.Column.List.Name" maxlength="60" required class="form-control form-control-sm" />
+                        <button type="submit" class="btn btn-sm btn-brand">Save</button>
+                    </form>
+                </details>
+                <form method="post" asp-page-handler="DeleteList" class="d-inline" onsubmit="return confirm('Delete this list and all its cards?');">
+                    <input type="hidden" name="listId" value="@Model.Column.List.Id" />
+                    <button type="submit" class="btn btn-sm btn-outline-danger" aria-label="Delete list" title="Delete list">&#128465;</button>
+                </form>
+            </div>
+        }
+    </div>
+
+    <div class="flex-grow-1 p-2 d-flex flex-column gap-2 kanban-column-body">
+        @for (int i = 0; i < Model.Column.Cards.Count; i++)
+        {
+            MudbaseShowcase.Kanban.Models.CardDocument card = Model.Column.Cards[i];
+            var itemModel = new MudbaseShowcase.Kanban.Models.CardItemViewModel
+            {
+                Card = card,
+                CurrentList = Model.Column,
+                OtherLists = Model.AllLists.Where(l => l.List.Id != Model.Column.List.Id).ToList(),
+                NextPositionByListId = Model.NextPositionByListId,
+                PrevCardId = i > 0 ? Model.Column.Cards[i - 1].Id : null,
+                NextCardId = i < Model.Column.Cards.Count - 1 ? Model.Column.Cards[i + 1].Id : null,
+                CanManage = Model.CanManageCards,
+            };
+            <partial name="_CardItem" model="itemModel" />
+        }
+        @if (Model.Column.Cards.Count == 0)
+        {
+            <p class="text-center text-muted small py-3 mb-0">No cards yet</p>
+        }
+    </div>
+
+    @if (Model.CanManageCards)
+    {
+        <div class="border-top p-2">
+            <details>
+                <summary class="btn btn-sm btn-outline-secondary w-100">+ Add card</summary>
+                <form method="post" asp-page-handler="CreateCard" class="mt-2">
+                    <input type="hidden" name="listId" value="@Model.Column.List.Id" />
+                    <div class="mb-2">
+                        <input type="text" name="title" maxlength="120" required class="form-control form-control-sm" placeholder="Title" />
+                    </div>
+                    <div class="mb-2">
+                        <textarea name="description" maxlength="2000" rows="2" class="form-control form-control-sm" placeholder="Description (optional)"></textarea>
+                    </div>
+                    <div class="mb-2">
+                        <input type="text" name="assigneeName" maxlength="80" class="form-control form-control-sm" placeholder="Assignee (optional)" />
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-brand">Add card</button>
+                </form>
+            </details>
+        </div>
+    }
+</div>

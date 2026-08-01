@@ -1,0 +1,66 @@
+:root {
+    --brand: #2563eb;
+    --brand-dark: #1d4ed8;
+}
+
+body {
+    background-color: #f8fafc;
+}
+
+.navbar-brand {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.btn-brand {
+    background-color: var(--brand);
+    border-color: var(--brand);
+    color: #fff;
+}
+
+.btn-brand:hover,
+.btn-brand:focus {
+    background-color: var(--brand-dark);
+    border-color: var(--brand-dark);
+    color: #fff;
+}
+
+.btn-brand:disabled {
+    background-color: var(--brand);
+    border-color: var(--brand);
+    opacity: 0.5;
+}
+
+.kanban-row {
+    align-items: flex-start;
+}
+
+.kanban-column {
+    width: 18rem;
+}
+
+.kanban-column-body {
+    max-height: 65vh;
+    overflow-y: auto;
+}
+
+.kanban-card-description {
+    white-space: pre-wrap;
+}
+
+.kanban-inline-form {
+    min-width: 14rem;
+}
+
+.kanban-timestamp {
+    font-size: 0.75rem;
+}
+
+details > summary {
+    cursor: pointer;
+    list-style: none;
+}
+
+details > summary::-webkit-details-marker {
+    display: none;
+}

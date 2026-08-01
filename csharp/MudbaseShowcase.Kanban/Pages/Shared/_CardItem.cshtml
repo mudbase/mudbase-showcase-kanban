@@ -1,0 +1,80 @@
+@model MudbaseShowcase.Kanban.Models.CardItemViewModel
+
+<div class="card shadow-none">
+    <div class="card-body p-2">
+        <div class="d-flex justify-content-between align-items-start gap-2">
+            <p class="mb-1 small fw-semibold">@Model.Card.Title</p>
+            @if (Model.CanManage)
+            {
+                <details>
+                    <summary class="btn btn-sm btn-outline-secondary" aria-label="Edit card" title="Edit card">&#9998;</summary>
+                    <form method="post" asp-page-handler="EditCard" class="mt-2 kanban-inline-form">
+                        <input type="hidden" name="cardId" value="@Model.Card.Id" />
+                        <div class="mb-2">
+                            <input type="text" name="title" value="@Model.Card.Title" maxlength="120" required class="form-control form-control-sm" />
+                        </div>
+                        <div class="mb-2">
+                            <textarea name="description" maxlength="2000" rows="2" class="form-control form-control-sm">@Model.Card.Description</textarea>
+                        </div>
+                        <div class="mb-2">
+                            <input type="text" name="assigneeName" value="@Model.Card.AssigneeName" maxlength="80" class="form-control form-control-sm" placeholder="Assignee (blank to unassign)" />
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-brand">Save changes</button>
+                    </form>
+                </details>
+            }
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Card.Description))
+        {
+            <p class="small text-muted mb-1 kanban-card-description">@Model.Card.Description</p>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(Model.Card.AssigneeName))
+        {
+            <p class="small text-muted mb-1 d-flex align-items-center gap-1">
+                <span class="badge text-bg-secondary">@DisplayHelpers.Initials(Model.Card.AssigneeName)</span>
+                @Model.Card.AssigneeName
+            </p>
+        }
+
+        @if (Model.CanManage)
+        {
+            <div class="d-flex align-items-center gap-1 mt-2 flex-wrap">
+                @if (Model.PrevCardId is not null)
+                {
+                    <form method="post" asp-page-handler="ReorderCard">
+                        <input type="hidden" name="cardId" value="@Model.Card.Id" />
+                        <input type="hidden" name="neighborCardId" value="@Model.PrevCardId" />
+                        <button type="submit" class="btn btn-sm btn-outline-secondary" aria-label="Move up" title="Move up">&uarr;</button>
+                    </form>
+                }
+                @if (Model.NextCardId is not null)
+                {
+                    <form method="post" asp-page-handler="ReorderCard">
+                        <input type="hidden" name="cardId" value="@Model.Card.Id" />
+                        <input type="hidden" name="neighborCardId" value="@Model.NextCardId" />
+                        <button type="submit" class="btn btn-sm btn-outline-secondary" aria-label="Move down" title="Move down">&darr;</button>
+                    </form>
+                }
+                @if (Model.OtherLists.Count > 0)
+                {
+                    <form method="post" asp-page-handler="MoveCard" class="d-flex gap-1 flex-grow-1">
+                        <input type="hidden" name="cardId" value="@Model.Card.Id" />
+                        <select name="toListId" class="form-select form-select-sm" aria-label="Move to list">
+                            @foreach (MudbaseShowcase.Kanban.Models.BoardListViewModel list in Model.OtherLists)
+                            {
+                                <option value="@list.List.Id">@list.List.Name</option>
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-outline-secondary">Move</button>
+                    </form>
+                }
+                <form method="post" asp-page-handler="DeleteCard" onsubmit="return confirm('Delete this card?');">
+                    <input type="hidden" name="cardId" value="@Model.Card.Id" />
+                    <button type="submit" class="btn btn-sm btn-outline-danger" aria-label="Delete card" title="Delete card">&#128465;</button>
+                </form>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,43 @@
+@page
+@model MudbaseShowcase.Kanban.Pages.ActivityModel
+@{
+    ViewData["Title"] = "Activity";
+}
+
+<h1 class="h4 fw-semibold mb-3">Activity</h1>
+
+@if (Model.LoadError is not null)
+{
+    <p class="text-danger">@Model.LoadError</p>
+}
+else if (Model.Entries.Count == 0)
+{
+    <div class="border border-dashed rounded p-5 text-center text-muted">No activity yet.</div>
+}
+else
+{
+    <ul class="list-unstyled d-flex flex-column gap-2">
+        @foreach (MudbaseShowcase.Kanban.Models.ActivityDocument entry in Model.Entries)
+        {
+            <li class="border-bottom pb-2">
+                <p class="mb-0 small">@ActivityText.Describe(entry)</p>
+                <p class="mb-0 text-muted kanban-timestamp">@DisplayHelpers.FormatRelativeTime(entry.CreatedAt)</p>
+            </li>
+        }
+    </ul>
+
+    <div class="d-flex justify-content-between mt-3">
+        @if (Model.CurrentPage > 1)
+        {
+            <a class="btn btn-outline-secondary btn-sm" asp-page="/Activity" asp-route-pg="@(Model.CurrentPage - 1)">&larr; Newer</a>
+        }
+        else
+        {
+            <span></span>
+        }
+        @if (Model.HasMore)
+        {
+            <a class="btn btn-outline-secondary btn-sm" asp-page="/Activity" asp-route-pg="@(Model.CurrentPage + 1)">Older &rarr;</a>
+        }
+    </div>
+}
