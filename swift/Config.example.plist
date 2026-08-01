@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- A project/collection/board ID is not a secret — see README "Configuration". These are the
+	     real, already-provisioned IDs for this showcase's Mudbase project (cloud.mudbase.dev), the
+	     same project every other language port in this monorepo targets. -->
+	<key>MudbaseProjectId</key>
+	<string>6a6d29b2d07caabbbdfc3f8c</string>
+	<key>MudbaseBaseURL</key>
+	<string>https://cloud.mudbase.dev</string>
+	<key>ListsCollectionId</key>
+	<string>6a6d29cad07caabbbdfc3f9a</string>
+	<key>CardsCollectionId</key>
+	<string>6a6d29cad07caabbbdfc3fad</string>
+	<key>ActivityCollectionId</key>
+	<string>6a6d29cbd07caabbbdfc3fc6</string>
+	<!-- Single shared board id — this is a single-board demo, not multi-tenant. Must be a real
+	     24-hex-char ObjectId (verified live: boardId/assigneeId are validated by the platform's
+	     query sanitizer as ObjectId references) — this is the id of the single document in the
+	     `boards` collection (6a6d405cd07caabbbdfc5c79), provisioned read-only-to-all/write-to-owner
+	     for this app. See ../web/plan/build-plan.md "Real platform finding". -->
+	<key>BoardId</key>
+	<string>6a6d4072d07caabbbdfc5d3c</string>
+</dict>
+</plist>
