@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Team Board — Kanban</title>
+  <th:block th:replace="~{fragments/layout :: head-assets}"></th:block>
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+
+<main class="container board-container">
+  <div class="board-heading">
+    <h1 class="page-title">Team Board</h1>
+    <p class="readonly-notice" th:if="${isReadOnly}">Read-only — you're signed in as <span th:text="${roleLabel}">Viewer</span></p>
+  </div>
+
+  <p class="alert alert-error" th:if="${formError}" th:text="${formError}">Error</p>
+
+  <div class="board-columns">
+    <section class="list-column" th:each="column : ${board.columns}">
+      <div class="list-column-header">
+        <h2 class="list-name" th:text="${column.list.name}">List name</h2>
+
+        <div class="list-owner-controls" th:if="${canManageLists}">
+          <form method="post" th:action="@{'/lists/' + ${column.list.id} + '/move-left'}">
+            <button type="submit" class="btn-xs" aria-label="Move list left" th:disabled="${column.prevListId == null}">←</button>
+          </form>
+          <form method="post" th:action="@{'/lists/' + ${column.list.id} + '/move-right'}">
+            <button type="submit" class="btn-xs" aria-label="Move list right" th:disabled="${column.nextListId == null}">→</button>
+          </form>
+          <form method="post" th:action="@{'/lists/' + ${column.list.id} + '/delete'}" onsubmit="return confirm('Delete this list and all its cards?')">
+            <button type="submit" class="btn-xs btn-danger" aria-label="Delete list">✕</button>
+          </form>
+        </div>
+      </div>
+
+      <details class="list-rename" th:if="${canManageLists}">
+        <summary>Rename</summary>
+        <form method="post" th:action="@{'/lists/' + ${column.list.id} + '/rename'}" class="inline-form">
+          <input type="text" name="name" th:value="${column.list.name}" maxlength="60" required />
+          <button type="submit" class="btn-xs">Save</button>
+        </form>
+      </details>
+
+      <div class="card-list">
+        <article class="board-card" th:each="row : ${column.cards}">
+          <p class="card-title" th:text="${row.card.title}">Card title</p>
+          <p class="card-description" th:if="${row.card.hasDescription}" th:text="${row.card.description}">Description</p>
+          <p class="card-assignee" th:if="${row.card.hasAssignee}">👤 <span th:text="${row.card.assigneeName}">Assignee</span></p>
+
+          <div class="card-manage-controls" th:if="${canManageCards}">
+            <form method="post" th:action="@{'/cards/' + ${row.card.id} + '/move-up'}">
+              <button type="submit" class="btn-xs" aria-label="Move up" th:disabled="${row.prevCardId == null}">↑</button>
+            </form>
+            <form method="post" th:action="@{'/cards/' + ${row.card.id} + '/move-down'}">
+              <button type="submit" class="btn-xs" aria-label="Move down" th:disabled="${row.nextCardId == null}">↓</button>
+            </form>
+            <form method="post" th:action="@{'/cards/' + ${row.card.id} + '/move'}" class="move-to-form" th:if="${!column.otherLists.isEmpty()}">
+              <select name="toListId" aria-label="Move to list">
+                <option th:each="ol : ${column.otherLists}" th:value="${ol.id}" th:text="${ol.name}">List</option>
+              </select>
+              <button type="submit" class="btn-xs">Move</button>
+            </form>
+            <form method="post" th:action="@{'/cards/' + ${row.card.id} + '/delete'}" onsubmit="return confirm('Delete this card?')">
+              <button type="submit" class="btn-xs btn-danger" aria-label="Delete card">✕</button>
+            </form>
+          </div>
+
+          <details class="card-edit" th:if="${canManageCards}">
+            <summary>Edit</summary>
+            <form method="post" th:action="@{'/cards/' + ${row.card.id} + '/edit'}" class="inline-form-stack">
+              <label class="sr-only" th:for="'title-' + ${row.card.id}">Title</label>
+              <input type="text" name="title" th:id="'title-' + ${row.card.id}" th:value="${row.card.title}" maxlength="120" required placeholder="Title" />
+              <label class="sr-only" th:for="'desc-' + ${row.card.id}">Description</label>
+              <textarea name="description" th:id="'desc-' + ${row.card.id}" th:text="${row.card.description}" maxlength="2000" rows="2" placeholder="Description (optional)"></textarea>
+              <label class="sr-only" th:for="'assignee-' + ${row.card.id}">Assignee</label>
+              <input type="text" name="assigneeName" th:id="'assignee-' + ${row.card.id}" th:value="${row.card.assigneeName}" maxlength="80" placeholder="Assignee (optional)" />
+              <button type="submit" class="btn-xs btn-accent">Save</button>
+            </form>
+          </details>
+        </article>
+
+        <p class="empty-column" th:if="${column.cards.isEmpty()}">No cards yet.</p>
+      </div>
+
+      <details class="add-card" th:if="${canManageCards}">
+        <summary>+ Add a card</summary>
+        <form method="post" th:action="@{/cards}" class="inline-form-stack">
+          <input type="hidden" name="listId" th:value="${column.list.id}" />
+          <input type="text" name="title" maxlength="120" required placeholder="Card title" />
+          <textarea name="description" maxlength="2000" rows="2" placeholder="Description (optional)"></textarea>
+          <input type="text" name="assigneeName" maxlength="80" placeholder="Assignee (optional)" />
+          <button type="submit" class="btn-xs btn-accent">Add card</button>
+        </form>
+      </details>
+    </section>
+
+    <section class="list-column add-list-column" th:if="${canManageLists}">
+      <h2 class="list-name muted">Add a list</h2>
+      <form method="post" th:action="@{/lists}" class="inline-form-stack">
+        <input type="text" name="name" maxlength="60" required placeholder="List name" />
+        <button type="submit" class="btn-xs btn-accent">Add list</button>
+      </form>
+    </section>
+
+    <p class="muted" th:if="${!board.hasLists and !canManageLists}">The board has no lists yet.</p>
+  </div>
+</main>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

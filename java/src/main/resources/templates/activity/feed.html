@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Activity — Kanban</title>
+  <th:block th:replace="~{fragments/layout :: head-assets}"></th:block>
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+
+<main class="container activity-container">
+  <a class="back-link" th:href="@{/}">← Back to board</a>
+  <h1 class="page-title">Activity</h1>
+  <p class="lede">Every list and card change on this board, newest first — read straight from the <code>activity</code> collection.</p>
+
+  <div th:if="${entries.isEmpty()}" class="empty-state">
+    <p>No activity yet.</p>
+  </div>
+
+  <ul th:unless="${entries.isEmpty()}" class="activity-list">
+    <li th:each="entry : ${entries}" class="activity-item">
+      <p class="activity-text" th:text="${entry.description}">Someone did something</p>
+      <p class="activity-time" th:text="${entry.formattedCreatedAt}">just now</p>
+    </li>
+  </ul>
+</main>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>
