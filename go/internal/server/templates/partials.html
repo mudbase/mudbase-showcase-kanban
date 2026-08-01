@@ -1,0 +1,155 @@
+{{/* card_item renders one CardItemView. Used by list_column below. */}}
+{{define "card_item"}}
+<div class="card-item">
+  <div class="card-item-head">
+    <p class="card-title">{{.Title}}</p>
+    {{if .CanManage}}
+    <div class="card-item-actions">
+      <details class="edit-details">
+        <summary class="icon-button" aria-label="Edit card" title="Edit card">&#9998;</summary>
+        <form method="post" action="/cards/{{.ID}}/edit" class="popover-form">
+          <label>Title
+            <input type="text" name="title" value="{{.Title}}" maxlength="120" required>
+          </label>
+          <label>Description
+            <textarea name="description" rows="3" maxlength="2000">{{.Description}}</textarea>
+          </label>
+          <label>Assignee (optional)
+            <input type="text" name="assigneeName" value="{{.AssigneeDisplay}}" maxlength="80" placeholder="e.g. Ben Chen">
+          </label>
+          <button type="submit" class="button button-sm">Save changes</button>
+        </form>
+      </details>
+      <form method="post" action="/cards/{{.ID}}/delete" class="inline-form" onsubmit="return confirm('Delete this card?');">
+        <button type="submit" class="icon-button icon-button-danger" aria-label="Delete card" title="Delete card">&#128465;</button>
+      </form>
+    </div>
+    {{end}}
+  </div>
+
+  {{if .Description}}<p class="card-desc">{{.Description}}</p>{{end}}
+
+  {{if .AssigneeDisplay}}
+  <p class="card-assignee">
+    <span class="avatar avatar-sm">{{.AssigneeInitials}}</span>
+    <span>{{.AssigneeDisplay}}</span>
+  </p>
+  {{end}}
+
+  {{if .CanManage}}
+  <div class="card-move-row">
+    <form method="post" action="/cards/{{.ID}}/reorder" class="inline-form">
+      <input type="hidden" name="neighborId" value="{{.PrevID}}">
+      <button type="submit" class="icon-button" {{if not .HasPrev}}disabled{{end}} aria-label="Move up" title="Move up">&uarr;</button>
+    </form>
+    <form method="post" action="/cards/{{.ID}}/reorder" class="inline-form">
+      <input type="hidden" name="neighborId" value="{{.NextID}}">
+      <button type="submit" class="icon-button" {{if not .HasNext}}disabled{{end}} aria-label="Move down" title="Move down">&darr;</button>
+    </form>
+    {{if .OtherLists}}
+    <form method="post" action="/cards/{{.ID}}/move" class="inline-form move-form">
+      <select name="toListId" aria-label="Move to list">
+        <option value="">Move to…</option>
+        {{range .OtherLists}}<option value="{{.ID}}">{{.Name}}</option>{{end}}
+      </select>
+      <button type="submit" class="button button-sm">Move</button>
+    </form>
+    {{end}}
+  </div>
+  {{end}}
+</div>
+{{end}}
+
+{{/* list_column renders one ListColumnView (a board column and its cards). Used by board_body. */}}
+{{define "list_column"}}
+<div class="list-column">
+  <div class="list-header">
+    <h2 class="list-title">{{.Name}} <span class="muted">({{len .Cards}})</span></h2>
+    {{if .CanManageLists}}
+    <div class="list-header-actions">
+      <form method="post" action="/lists/{{.ID}}/reorder" class="inline-form">
+        <input type="hidden" name="direction" value="left">
+        <button type="submit" class="icon-button" {{if not .HasPrev}}disabled{{end}} aria-label="Move list left" title="Move list left">&larr;</button>
+      </form>
+      <form method="post" action="/lists/{{.ID}}/reorder" class="inline-form">
+        <input type="hidden" name="direction" value="right">
+        <button type="submit" class="icon-button" {{if not .HasNext}}disabled{{end}} aria-label="Move list right" title="Move list right">&rarr;</button>
+      </form>
+      <details class="rename-details">
+        <summary class="icon-button" aria-label="Rename list" title="Rename list">&#9998;</summary>
+        <form method="post" action="/lists/{{.ID}}/rename" class="popover-form popover-form-inline">
+          <input type="text" name="name" value="{{.Name}}" maxlength="60" required autofocus>
+          <button type="submit" class="button button-sm">Save</button>
+        </form>
+      </details>
+      <form method="post" action="/lists/{{.ID}}/delete" class="inline-form" onsubmit="return confirm('Delete this list and its cards?');">
+        <button type="submit" class="icon-button icon-button-danger" aria-label="Delete list" title="Delete list">&#128465;</button>
+      </form>
+    </div>
+    {{end}}
+  </div>
+
+  <div class="card-stack">
+    {{range .Cards}}{{template "card_item" .}}{{end}}
+    {{if not .Cards}}<p class="empty-note">No cards yet</p>{{end}}
+  </div>
+
+  {{if .CanManageCards}}
+  <details class="add-card-details">
+    <summary class="button button-outline button-sm add-card-summary">+ Add card</summary>
+    <form method="post" action="/cards" class="popover-form">
+      <input type="hidden" name="listId" value="{{.ID}}">
+      <label>Title
+        <input type="text" name="title" maxlength="120" placeholder="e.g. Write onboarding docs" required>
+      </label>
+      <label>Description (optional)
+        <textarea name="description" rows="3" maxlength="2000"></textarea>
+      </label>
+      <label>Assignee (optional)
+        <input type="text" name="assigneeName" maxlength="80" placeholder="e.g. Ben Chen">
+      </label>
+      <button type="submit" class="button button-sm">Create card</button>
+    </form>
+  </details>
+  {{end}}
+</div>
+{{end}}
+
+{{/* board_body renders a BoardBodyView (every list/column + an owner-only "add list" control).
+     Used by board.html (initial render, wrapped in a div the poll script replaces) and
+     board_fragment.html (the poll target itself) - one definition shared by both so they can
+     never drift out of sync. */}}
+{{define "board_body"}}
+<div class="board-row">
+  {{range .Lists}}{{template "list_column" .}}{{end}}
+  {{if .CanManageLists}}
+  <div class="list-column add-list-column">
+    <form method="post" action="/lists" class="popover-form">
+      <label>New list
+        <input type="text" name="name" maxlength="60" placeholder="List name" required>
+      </label>
+      <button type="submit" class="button button-sm">Add list</button>
+    </form>
+  </div>
+  {{else if not .Lists}}
+  <p class="muted">The board has no lists yet.</p>
+  {{end}}
+</div>
+{{end}}
+
+{{/* activity_body renders an ActivityBodyView (the reverse-chronological log). Used by
+     activity.html and activity_fragment.html. */}}
+{{define "activity_body"}}
+{{if not .Entries}}
+<div class="empty-state"><p>No activity yet — actions on the board will show up here.</p></div>
+{{else}}
+<ul class="activity-list">
+  {{range .Entries}}
+  <li class="activity-item">
+    <span class="activity-text">{{.Text}}</span>
+    <span class="muted activity-timestamp">{{.CreatedLabel}}</span>
+  </li>
+  {{end}}
+</ul>
+{{end}}
+{{end}}

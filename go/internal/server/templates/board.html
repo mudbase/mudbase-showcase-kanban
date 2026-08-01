@@ -1,0 +1,29 @@
+{{define "content"}}
+<div class="board-header">
+  <h1>Team Board</h1>
+  {{if .ReadOnly}}
+  <p class="readonly-note">Read-only — you&#39;re signed in as {{.RoleLabel}}</p>
+  {{end}}
+</div>
+
+<div id="board-body">{{template "board_body" .}}</div>
+
+<script>
+(function () {
+  var container = document.getElementById("board-body");
+  function refresh() {
+    fetch("/board/fragment")
+      .then(function (res) { if (!res.ok) throw new Error("refresh failed"); return res.text(); })
+      .then(function (html) {
+        // Never replace the board body while an <details> popover (rename/edit/add forms) is
+        // open - an in-progress edit would otherwise vanish mid-keystroke on every poll tick.
+        if (container.querySelector("details[open]")) return;
+        container.innerHTML = html;
+      })
+      .catch(function () { /* keep showing the last good state; try again next tick */ })
+      .finally(function () { setTimeout(refresh, 4000); });
+  }
+  setTimeout(refresh, 4000);
+})();
+</script>
+{{end}}

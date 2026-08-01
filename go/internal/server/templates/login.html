@@ -1,0 +1,47 @@
+{{define "content"}}
+<div class="login-card">
+  <h1>Sign in</h1>
+
+  {{/* Quick-fill demo accounts - the same three pre-provisioned, pre-verified role accounts the
+       reference web app's LoginForm.tsx ships (see plan/build-plan.md "Real platform finding" for
+       why these replace the task's originally-specified `.test`-domain accounts, which fail
+       Mudbase's own login validation). The password is a public demo credential, not a secret -
+       documented here and in README.md, never used for anything beyond this shared showcase
+       project. */}}
+  <div class="quickfill-row">
+    <form method="post" action="/login" class="inline-form">
+      <input type="hidden" name="email" value="kanban.owner.demo@gmail.com">
+      <input type="hidden" name="password" value="KanbanTest123!">
+      <input type="hidden" name="redirect" value="{{.Redirect}}">
+      <button type="submit" class="button button-outline button-sm">Owner</button>
+    </form>
+    <form method="post" action="/login" class="inline-form">
+      <input type="hidden" name="email" value="kanban.member.demo@gmail.com">
+      <input type="hidden" name="password" value="KanbanTest123!">
+      <input type="hidden" name="redirect" value="{{.Redirect}}">
+      <button type="submit" class="button button-outline button-sm">Member</button>
+    </form>
+    <form method="post" action="/login" class="inline-form">
+      <input type="hidden" name="email" value="kanban.viewer.demo@gmail.com">
+      <input type="hidden" name="password" value="KanbanTest123!">
+      <input type="hidden" name="redirect" value="{{.Redirect}}">
+      <button type="submit" class="button button-outline button-sm">Viewer</button>
+    </form>
+  </div>
+
+  <div class="divider"><span>or sign in manually</span></div>
+
+  <form method="post" action="/login" class="stacked">
+    <input type="hidden" name="redirect" value="{{.Redirect}}">
+    <div class="field">
+      <label for="email">Email</label>
+      <input id="email" type="email" name="email" autocomplete="email" placeholder="kanban.owner.demo@gmail.com" required>
+    </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <input id="password" type="password" name="password" autocomplete="current-password" required>
+    </div>
+    <button type="submit" class="button">Sign in</button>
+  </form>
+</div>
+{{end}}
