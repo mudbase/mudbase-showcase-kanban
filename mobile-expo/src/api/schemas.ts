@@ -6,7 +6,7 @@ import { z } from "zod";
  * The generated `mudbase-sdk`'s auth response models (e.g.
  * `LoginLocalUser200ResponseUser`) omit `customRole` even though the live API
  * includes it on every project-scoped session response (this app's entire
- * RBAC gating depends on it) — the same gap the sibling
+ * RBAC gating depends on it) - the same gap the sibling
  * `mudbase-showcase-social/mobile-expo` port's `schemas.ts` documents against
  * the same generated SDK. Likewise `DataResponse`/`DataListResponse` type
  * their `data` field as bare `object`. Rather than casting past the generated
@@ -17,7 +17,7 @@ import { z } from "zod";
 
 // ─── Auth / User ────────────────────────────────────────────────────────────
 
-/** Role slugs this project's multi-role auth is configured with — see plan/build-plan.md. */
+/** Role slugs this project's multi-role auth is configured with - see plan/build-plan.md. */
 export const appRoleSchema = z.enum(["owner", "member", "viewer"]);
 export type AppRole = z.infer<typeof appRoleSchema>;
 
@@ -62,7 +62,7 @@ export const boardCardSchema = documentBaseSchema.extend({
   title: z.string(),
   description: z.string().nullable().optional(),
   position: z.number(),
-  // `null` is a real, valid state here (an explicitly-cleared assignee — see useUpdateCard),
+  // `null` is a real, valid state here (an explicitly-cleared assignee - see useUpdateCard),
   // distinct from `undefined` (the field was never set on creation).
   assigneeId: z.string().nullable().optional(),
   assigneeName: z.string().nullable().optional(),

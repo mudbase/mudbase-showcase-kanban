@@ -27,7 +27,7 @@ export function ActivityFeed(): React.JSX.Element {
     return (
       <Card>
         <CardContent className="p-6 text-center text-sm text-muted-foreground">
-          No activity yet — actions on the board will show up here.
+          No activity yet - actions on the board will show up here.
         </CardContent>
       </Card>
     )

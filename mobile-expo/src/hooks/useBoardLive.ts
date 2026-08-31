@@ -16,13 +16,13 @@ interface RowEvent {
  * Subscribes to the Socket.IO rooms for `lists`, `cards`, and `activity` so
  * another signed-in user's column add/rename/delete/reorder, card
  * create/edit/move/delete, and every new activity row all appear live, with
- * no polling — the same `subscribe:collection` / `db:create` / `db:update` /
+ * no polling - the same `subscribe:collection` / `db:create` / `db:update` /
  * `db:delete` contract confirmed live against this project in
  * web/plan/build-plan.md, ported near-verbatim from
  * web/src/hooks/useBoardLive.ts.
  *
  * A live event from another user just invalidates the matching query key
- * (this board's own mutations already invalidate + refetch on success) —
+ * (this board's own mutations already invalidate + refetch on success) -
  * simpler than replicating three different cache-patch shapes, and at demo
  * scale (a handful of lists/cards) a refetch is effectively instant.
  */

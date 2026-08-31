@@ -8,7 +8,7 @@ import type { ActivityEntry } from "@/api/schemas";
 
 /**
  * Reverse-chronological activity feed. Unlike the board's columns/cards (demo-scale, rendered
- * with a plain `.map()` — see BoardScreenContent), this feed can grow past demo scale (server
+ * with a plain `.map()` - see BoardScreenContent), this feed can grow past demo scale (server
  * caps it at 200 rows) so it uses a real `FlatList`, per the react-native-perf skill's guidance
  * for anything list-shaped and potentially long. Mirrors web/src/components/activity/ActivityFeed.tsx.
  */
@@ -49,7 +49,7 @@ export function ActivityFeed(): React.JSX.Element {
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => void refetch()} tintColor="#4a43db" />}
       ListEmptyComponent={
         <View className="items-center py-16">
-          <Text className="text-sm text-muted-foreground">No activity yet — actions on the board will show up here.</Text>
+          <Text className="text-sm text-muted-foreground">No activity yet - actions on the board will show up here.</Text>
         </View>
       }
     />

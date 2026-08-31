@@ -1,4 +1,4 @@
-# Build Plan — Mudbase Showcase: Kanban (Go)
+# Build Plan - Mudbase Showcase: Kanban (Go)
 
 Generated: 2026-08-01
 Mode: port (Go server-rendered reimplementation of the reference Next.js app in `../web`)
@@ -215,7 +215,7 @@ several minutes with periodic retries before succeeding - a platform characteris
 | Member reorders that card up within "In Progress" (`POST /cards/:id/reorder`) | `303` -> position swap confirmed (card now renders before its former predecessor) |
 | Member deletes a card | `303` -> card removed from the board; activity feed shows `Max Member deleted card "..." from In Progress` |
 | **Member attempts `POST /lists` (create list) through this app** | `303` -> `/?error=Only+the+board+owner+can+manage+lists.` - blocked by `requireListManager` before any Mudbase call |
-| Viewer logs in | board renders **read-only**: `grep` for `Add list`, `add-card-summary`, `card-item-actions`, `card-move-row` all return **0 matches** - zero write controls rendered; read-only notice "Read-only — you're signed in as Viewer" shown |
+| Viewer logs in | board renders **read-only**: `grep` for `Add list`, `add-card-summary`, `card-item-actions`, `card-move-row` all return **0 matches** - zero write controls rendered; read-only notice "Read-only - you're signed in as Viewer" shown |
 | Viewer reads `/activity` | `200`, full log visible (49 entries) |
 | **Viewer attempts `POST /cards` (create) through this app** | `303` -> `/?error=Viewers+can%27t+modify+cards+on+this+board.` - blocked by `requireCardManager` |
 | **Viewer attempts `POST /lists` (create) through this app** | `303` -> `/?error=Only+the+board+owner+can+manage+lists.` |

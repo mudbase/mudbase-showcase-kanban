@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Activity — Kanban</title>
+  <title>Activity - Kanban</title>
   <th:block th:replace="~{fragments/layout :: head-assets}"></th:block>
 </head>
 <body>
@@ -10,7 +10,7 @@
 <main class="container activity-container">
   <a class="back-link" th:href="@{/}">← Back to board</a>
   <h1 class="page-title">Activity</h1>
-  <p class="lede">Every list and card change on this board, newest first — read straight from the <code>activity</code> collection.</p>
+  <p class="lede">Every list and card change on this board, newest first - read straight from the <code>activity</code> collection.</p>
 
   <div th:if="${entries.isEmpty()}" class="empty-state">
     <p>No activity yet.</p>

@@ -31,7 +31,7 @@ interface CardFormModalProps {
 }
 
 /** Create-or-edit modal for a card. Which mode it's in is determined by whether `editingCard`
- * is present — both modes share the same form and validation. Mirrors
+ * is present - both modes share the same form and validation. Mirrors
  * web/src/components/board/CardDialog.tsx. */
 export function CardFormModal({
   open,

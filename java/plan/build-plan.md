@@ -1,4 +1,4 @@
-# Build Plan — Mudbase Showcase: Kanban (Java / Spring Boot port)
+# Build Plan - Mudbase Showcase: Kanban (Java / Spring Boot port)
 Generated: 2026-08-01
 Mode: port (Java/Spring Boot reimplementation of the reference Next.js app at `../web`)
 Type: server-rendered web app (fullstack via BaaS, no custom backend)
@@ -69,12 +69,12 @@ call back to back) is exactly the multi-call-from-one-snapshot shape that bug re
 
 ## Real, live, already-provisioned Mudbase project (same project as `../web`)
 - Base URL: `https://cloud.mudbase.dev`, Project ID: `6a6d29b2d07caabbbdfc3f8c`
-- `lists` — `6a6d29cad07caabbbdfc3f9a` — `boardId`, `name`, `position`
-- `cards` — `6a6d29cad07caabbbdfc3fad` — `boardId`, `listId`, `title`, `description?`, `position`,
+- `lists` - `6a6d29cad07caabbbdfc3f9a` - `boardId`, `name`, `position`
+- `cards` - `6a6d29cad07caabbbdfc3fad` - `boardId`, `listId`, `title`, `description?`, `position`,
   `assigneeId?`, `assigneeName?`, `createdById`, `createdByName`
-- `activity` — `6a6d29cbd07caabbbdfc3fc6` — `boardId`, `actorId`, `actorName`, `action`,
+- `activity` - `6a6d29cbd07caabbbdfc3fc6` - `boardId`, `actorId`, `actorName`, `action`,
   `cardTitle?`, `fromList?`, `toList?`
-- `boards` — `6a6d405cd07caabbbdfc5c79`, single document `6a6d4072d07caabbbdfc5d3c` — this app
+- `boards` - `6a6d405cd07caabbbdfc5c79`, single document `6a6d4072d07caabbbdfc5d3c` - this app
   never reads this collection (same as the web app); it exists purely so `BOARD_ID` is a real
   24-hex ObjectId rather than a hand-picked slug. `MudbaseProperties` validates the configured
   `mudbase.board-id` against `^[0-9a-fA-F]{24}$` at startup and fails fast if it isn't.
@@ -205,7 +205,7 @@ were unaffected.
 | Member moves a card ("To Do" → "In Progress") | ✅ `POST /cards/{id}/move` → 302; `activity` row `moved` (`fromList` "To Do" → `toList` "In Progress") |
 | Member edits a card (title, description, assignee "Max Member") | ✅ `POST /cards/{id}/edit` → 302; fields updated correctly |
 | Login as viewer (`kanban.viewer.demo@gmail.com`) | ✅ 302 → `/`, session established |
-| Viewer board `GET /` | ✅ 200, role badge "Viewer", "Read-only — you're signed in as Viewer" notice shown; **zero** write controls rendered (`Add a list`, `Add a card`, and `card-manage-controls` all 0 occurrences) |
+| Viewer board `GET /` | ✅ 200, role badge "Viewer", "Read-only - you're signed in as Viewer" notice shown; **zero** write controls rendered (`Add a list`, `Add a card`, and `card-manage-controls` all 0 occurrences) |
 | **Viewer `POST /cards` (create)** | ✅ **403**, body `"Only the board owner or a member can create a card."` |
 | **Viewer `POST /cards/{id}/delete`** | ✅ **403** |
 | **Viewer `POST /cards/{id}/move`** | ✅ **403** |

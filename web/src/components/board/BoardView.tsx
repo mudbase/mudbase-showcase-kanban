@@ -71,7 +71,7 @@ export function BoardView(): React.JSX.Element {
         <h1 className="text-2xl font-semibold tracking-tight">Team Board</h1>
         {readOnly && (
           <p className="rounded-md border border-border bg-muted px-3 py-1.5 text-sm text-muted-foreground">
-            Read-only — you&apos;re signed in as {roleLabel(role)}
+            Read-only - you&apos;re signed in as {roleLabel(role)}
           </p>
         )}
       </div>

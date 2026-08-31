@@ -22,7 +22,7 @@ export function initials(name: string): string {
   return (first + last).toUpperCase();
 }
 
-/** djb2, a small deterministic string hash — used below to derive a stable pseudo-ObjectId,
+/** djb2, a small deterministic string hash - used below to derive a stable pseudo-ObjectId,
  * nothing more. */
 function djb2(str: string): number {
   let hash = 5381;
@@ -36,11 +36,11 @@ function djb2(str: string): number {
  * There is no `users` collection in this app's data model (see
  * plan/build-plan.md), so an assignee is captured as a free-typed name rather
  * than looked up from a directory. `cards.assigneeId` is schema-typed as an
- * ObjectId reference on the live platform — a plain slug like "mia-member" is
+ * ObjectId reference on the live platform - a plain slug like "mia-member" is
  * rejected with "Invalid ObjectId format for assigneeId". This derives a
  * stable, valid-looking 24-hex-char id from the typed name (the same name
  * always maps to the same id) purely so `assigneeId` passes that format check
- * and is never left orphaned from `assigneeName` — it is not a real user
+ * and is never left orphaned from `assigneeName` - it is not a real user
  * lookup key. Byte-for-byte port of web/src/lib/utils.ts's `pseudoObjectId()`.
  */
 export function pseudoObjectId(seed: string): string {

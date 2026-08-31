@@ -9,7 +9,7 @@ import { ListColumn } from "@/components/board/ListColumn";
 import { AddListForm } from "@/components/board/AddListForm";
 import type { BoardCard } from "@/api/schemas";
 
-/** The board screen's content — everything below AppHeader. Mirrors
+/** The board screen's content - everything below AppHeader. Mirrors
  * web/src/components/board/BoardView.tsx. */
 export function BoardScreenContent(): React.JSX.Element {
   const { role } = useAuth();
@@ -77,7 +77,7 @@ export function BoardScreenContent(): React.JSX.Element {
       {readOnly && (
         <View className="mx-4 mb-2 rounded-md border border-border bg-muted px-3 py-2">
           <Text className="text-xs text-muted-foreground">
-            Read-only — you&apos;re signed in as {roleLabel(role)}
+            Read-only - you&apos;re signed in as {roleLabel(role)}
           </Text>
         </View>
       )}

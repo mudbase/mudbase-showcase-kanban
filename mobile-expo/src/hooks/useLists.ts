@@ -110,7 +110,7 @@ export function useReorderList() {
   });
 }
 
-/** Owner-only: deletes a column and cascades to every card inside it — a list's cards have
+/** Owner-only: deletes a column and cascades to every card inside it - a list's cards have
  * nowhere else to live once the column is gone, there's no "uncategorized" list to fall back to. */
 export function useDeleteList() {
   const { user } = useAuth();

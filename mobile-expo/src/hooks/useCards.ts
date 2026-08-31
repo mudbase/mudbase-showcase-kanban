@@ -5,7 +5,7 @@ import { boardCardSchema, activityEntrySchema, type BoardCard } from "@/api/sche
 import { CARDS_COLLECTION_ID, ACTIVITY_COLLECTION_ID, BOARD_ID } from "@/config/env";
 import { useAuth } from "@/hooks/useAuth";
 
-/** All cards for the single shared board, ascending by in-column order — fetched once and
+/** All cards for the single shared board, ascending by in-column order - fetched once and
  * grouped client-side by listId (see BoardScreenContent), rather than one query per column.
  * Mirrors web/src/hooks/useCards.ts's useBoardCards. */
 export function useBoardCards() {
@@ -90,13 +90,13 @@ export interface EditCardInput {
 }
 
 /** Owner/member: edits a card's title/description/assignee in place. Not itself logged to the
- * activity feed — only creation, movement, and deletion are. */
+ * activity feed - only creation, movement, and deletion are. */
 export function useUpdateCard() {
   const queryClient = useQueryClient();
 
   const mutate = useCallback(async (input: EditCardInput): Promise<BoardCard> => {
     // `assigneeId` is validated server-side as an ObjectId reference (verified live in the web
-    // reference build) — an empty string fails that check the same way an invalid slug would
+    // reference build) - an empty string fails that check the same way an invalid slug would
     // ("Invalid ObjectId format for assigneeId"). `null` is the value that actually clears it;
     // never send "" here.
     return mudbaseClient.updateDocument(boardCardSchema, CARDS_COLLECTION_ID, input.card._id, {

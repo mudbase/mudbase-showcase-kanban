@@ -1,7 +1,7 @@
-# Mudbase Showcase — Kanban
+# Mudbase Showcase - Kanban
 
-A team task board (Kanban) built **entirely on [Mudbase](https://www.mudbase.dev)** — auth,
-database, and realtime — with **zero custom backend**. The same app, reimplemented once per
+A team task board (Kanban) built **entirely on [Mudbase](https://www.mudbase.dev)** - auth,
+database, and realtime - with **zero custom backend**. The same app, reimplemented once per
 official Mudbase SDK, so every supported language has a real, runnable reference app rather than
 a toy snippet.
 
@@ -25,7 +25,7 @@ and a realtime activity log.
 | [`php/`](./php) | Server-rendered web app | PHP |
 | [`swift/`](./swift) | iOS app (SwiftUI) | Swift |
 
-Each directory is self-contained with its own README, dependency manifest, and `.env.example` —
+Each directory is self-contained with its own README, dependency manifest, and `.env.example` -
 clone this repo and only set up the language you care about.
 
 ## Prerequisite: clone the SDK repo as a sibling
@@ -45,15 +45,15 @@ some-folder/
 
 Three collections on a single Mudbase project, plus three multi-role roles:
 
-- **lists** — `boardId`, `name`, `position` (a single shared board — `boardId` is a constant)
-- **cards** — `boardId`, `listId`, `title`, `description?`, `position`, `assigneeId?`,
+- **lists** - `boardId`, `name`, `position` (a single shared board - `boardId` is a constant)
+- **cards** - `boardId`, `listId`, `title`, `description?`, `position`, `assigneeId?`,
   `assigneeName?`, `createdById`, `createdByName`
-- **activity** — `boardId`, `actorId`, `actorName`, `action`, `cardTitle?`, `fromList?`, `toList?`
+- **activity** - `boardId`, `actorId`, `actorName`, `action`, `cardTitle?`, `fromList?`, `toList?`
 
 Roles: **owner** (full CRUD everywhere), **member** (read lists, full CRUD cards, log activity),
-**viewer** (read-only everywhere — no writes at all). Auth, users, and realtime are all native
-Mudbase features — no separate user table.
+**viewer** (read-only everywhere - no writes at all). Auth, users, and realtime are all native
+Mudbase features - no separate user table.
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+MIT - see [LICENSE](./LICENSE).

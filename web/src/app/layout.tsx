@@ -7,11 +7,11 @@ import "./globals.css"
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Mudbase Showcase — Kanban",
-    default: "Mudbase Showcase — Kanban",
+    template: "%s | Mudbase Showcase - Kanban",
+    default: "Mudbase Showcase - Kanban",
   },
   description:
-    "A realtime team task board built entirely on Mudbase — auth, lists, cards, role-based access control, and live updates, with zero custom backend.",
+    "A realtime team task board built entirely on Mudbase - auth, lists, cards, role-based access control, and live updates, with zero custom backend.",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }): React.JSX.Element {
@@ -28,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
                 <a href="https://www.mudbase.dev" className="underline underline-offset-4" target="_blank" rel="noreferrer">
                   Mudbase
                 </a>{" "}
-                — no custom backend.
+                - no custom backend.
               </footer>
             </div>
           </MudbaseProvider>

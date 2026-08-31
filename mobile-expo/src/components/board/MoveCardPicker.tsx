@@ -14,7 +14,7 @@ interface MoveCardPickerProps {
 }
 
 /**
- * "Move to…" picker: a small centered Modal listing the other columns as tappable rows — the RN
+ * "Move to…" picker: a small centered Modal listing the other columns as tappable rows - the RN
  * equivalent of the web reference's `<Select>` dropdown (see web/src/components/board/MoveCardControl.tsx).
  * Moving a card to a different column always appends it to the end of that column; reordering
  * within the same column is handled separately by the up/down buttons in CardItem.

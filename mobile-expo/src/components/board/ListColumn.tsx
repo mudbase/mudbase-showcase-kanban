@@ -24,7 +24,7 @@ interface ListColumnProps {
   canManageCards: boolean;
 }
 
-/** One board column. Mirrors web/src/components/board/ListColumn.tsx. Not virtualized — this
+/** One board column. Mirrors web/src/components/board/ListColumn.tsx. Not virtualized - this
  * board operates at demo scale (a handful of lists/cards, see plan/build-plan.md), matching the
  * web reference's own choice not to virtualize at this size. */
 export function ListColumn({

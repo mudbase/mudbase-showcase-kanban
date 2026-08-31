@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "A realtime team task board (Kanban) built entirely on Mudbase — auth, lists, cards, RBAC, and live updates, with zero custom backend.",
+  "description": "A realtime team task board (Kanban) built entirely on Mudbase - auth, lists, cards, RBAC, and live updates, with zero custom backend.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

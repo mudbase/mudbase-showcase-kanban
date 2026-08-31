@@ -5,7 +5,7 @@ export interface MudbaseConfig {
   projectId: string
 }
 
-/** Role slugs this project's multi-role auth is configured with — see plan/build-plan.md. */
+/** Role slugs this project's multi-role auth is configured with - see plan/build-plan.md. */
 export type AppRole = "owner" | "member" | "viewer"
 
 export interface RegisterParams {
@@ -14,7 +14,7 @@ export interface RegisterParams {
   firstName: string
   lastName: string
   role: AppRole
-  /** Required by Mudbase's registration validator — a direct API call without it is rejected. */
+  /** Required by Mudbase's registration validator - a direct API call without it is rejected. */
   agreedToTerms: boolean
 }
 

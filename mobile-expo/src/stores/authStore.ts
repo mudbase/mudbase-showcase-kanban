@@ -20,14 +20,14 @@ function messageFrom(err: unknown, fallback: string): string {
 }
 
 /**
- * A plain in-memory zustand store, not persisted via MMKV/AsyncStorage — the
+ * A plain in-memory zustand store, not persisted via MMKV/AsyncStorage - the
  * only durable state is the token pair in SecureStore (mudbaseClient owns
  * that). Unlike the sibling `mudbase-showcase-social` port, there is **no
- * anonymous-session fallback** here — this app's Mudbase collections require
+ * anonymous-session fallback** here - this app's Mudbase collections require
  * a real authenticated JWT for every role, including the read-only viewer
  * (see plan/build-plan.md "No Anonymous Session"). A cold start with no valid
  * tokens, or a session that fails to restore, simply leaves `user: null` and
- * the root navigator redirects to `/login` — mirroring
+ * the root navigator redirects to `/login` - mirroring
  * web/src/lib/mudbase-provider.tsx's own "no anonymous fallback" bootstrap.
  */
 export const useAuthStore = create<AuthState>((set) => ({
@@ -47,7 +47,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         return;
       }
     }
-    // No tokens, or a restored session that failed to validate — no fallback session exists in
+    // No tokens, or a restored session that failed to validate - no fallback session exists in
     // this app. AuthGate/root navigator sends the user to /login.
     set({ user: null, isInitializing: false });
   },

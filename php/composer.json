@@ -1,6 +1,6 @@
 {
     "name": "mudbase/showcase-kanban-php",
-    "description": "Mudbase Kanban — PHP reimplementation of the Mudbase showcase team task board. Plain PHP, no framework, backed entirely by the real Mudbase PHP SDK.",
+    "description": "Mudbase Kanban - PHP reimplementation of the Mudbase showcase team task board. Plain PHP, no framework, backed entirely by the real Mudbase PHP SDK.",
     "type": "project",
     "license": "unlicense",
     "require": {

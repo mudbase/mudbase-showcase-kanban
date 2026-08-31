@@ -16,9 +16,9 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 const DEMO_PASSWORD = "KanbanTest123!";
 // The `.test` TLD emails originally spec'd for this demo fail Mudbase's own login validation
-// live — Joi's default email() check excludes RFC 2606 reserved special-use TLDs. These
+// live - Joi's default email() check excludes RFC 2606 reserved special-use TLDs. These
 // valid-domain accounts are registered under the same owner/member/viewer role slugs on the same
-// project — see plan/build-plan.md "Real Platform Findings".
+// project - see plan/build-plan.md "Real Platform Findings".
 const DEMO_ACCOUNTS = [
   { role: "Owner", email: "kanban.owner.demo@gmail.com" },
   { role: "Member", email: "kanban.member.demo@gmail.com" },
